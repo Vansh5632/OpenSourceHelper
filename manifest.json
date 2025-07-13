@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "GitHub Issue AI Summarizer",
+  "version": "1.0.0",
+  "description": "AI-powered GitHub issue and comment summarizer with GitHub OAuth",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "identity",
+    "https://github.com/*",
+    "https://api.github.com/*"
+  ],
+  "host_permissions": [
+    "https://github.com/*",
+    "https://api.github.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background/worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*/issues/*"],
+      "js": ["src/content/content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "GitHub Issue Summarizer",
+    "default_icon": {
+      "16": "public/icon16.png",
+      "48": "public/icon48.png",
+      "128": "public/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "public/icon16.png",
+    "48": "public/icon48.png",
+    "128": "public/icon128.png"
+  },
+  "oauth2": {
+    "client_id": "YOUR_GITHUB_CLIENT_ID",
+    "scopes": ["repo", "read:user"]
+  }
+}
