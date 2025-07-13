@@ -15,17 +15,17 @@
     "https://api.github.com/*"
   ],
   "background": {
-    "service_worker": "src/background/worker.js"
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
       "matches": ["https://github.com/*/issues/*"],
-      "js": ["src/content/content.js"],
+      "js": ["content.js"],
       "run_at": "document_end"
     }
   ],
   "action": {
-    "default_popup": "src/popup/popup.html",
+    "default_popup": "popup.html",
     "default_title": "GitHub Issue Summarizer",
     "default_icon": {
       "16": "public/icon16.png",
