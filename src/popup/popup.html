@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Issue AI Summarizer</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="logo">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                <h1>GitHub Issue AI Summarizer</h1>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Authentication Section -->
+            <section id="auth-section" class="section">
+                <div class="auth-container">
+                    <div id="login-view" class="auth-view">
+                        <h2>Welcome!</h2>
+                        <p>Sign in with GitHub to start summarizing issues with AI</p>
+                        <button id="login-btn" class="btn btn-primary">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                            </svg>
+                            Sign in with GitHub
+                        </button>
+                    </div>
+
+                    <div id="user-view" class="auth-view hidden">
+                        <div class="user-info">
+                            <img id="user-avatar" src="" alt="User Avatar" class="user-avatar">
+                            <div class="user-details">
+                                <h3 id="user-name"></h3>
+                                <p id="user-login"></p>
+                            </div>
+                        </div>
+                        <button id="logout-btn" class="btn btn-secondary">Sign Out</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- API Key Configuration -->
+            <section id="config-section" class="section">
+                <h2>Configuration</h2>
+                <div class="config-item">
+                    <label for="api-key">OpenAI API Key:</label>
+                    <div class="input-group">
+                        <input type="password" id="api-key" placeholder="sk-...">
+                        <button id="save-api-key" class="btn btn-secondary">Save</button>
+                    </div>
+                    <p class="help-text">Your API key is stored locally and never shared</p>
+                </div>
+                <div class="config-item">
+                    <label for="model-select">AI Model:</label>
+                    <select id="model-select">
+                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                        <option value="gpt-4">GPT-4</option>
+                        <option value="gpt-4-turbo-preview">GPT-4 Turbo</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Current Issue Section -->
+            <section id="issue-section" class="section">
+                <h2>Current Issue</h2>
+                <div id="no-issue" class="placeholder">
+                    <p>Navigate to a GitHub issue to see details here</p>
+                </div>
+                <div id="issue-details" class="issue-details hidden">
+                    <div class="issue-header">
+                        <h3 id="issue-title"></h3>
+                        <span id="issue-state" class="state-badge"></span>
+                    </div>
+                    <div class="issue-meta">
+                        <span id="issue-author"></span>
+                        <span id="issue-date"></span>
+                    </div>
+                    <div id="issue-labels" class="labels"></div>
+                    <div class="issue-actions">
+                        <button id="summarize-btn" class="btn btn-primary">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm4.879-2.773 4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215Z"/>
+                            </svg>
+                            Generate AI Summary
+                        </button>
+                        <button id="refresh-btn" class="btn btn-secondary">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z"/>
+                            </svg>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary Section -->
+            <section id="summary-section" class="section hidden">
+                <h2>AI Summary</h2>
+                <div id="summary-content"></div>
+            </section>
+
+            <!-- Status Section -->
+            <section id="status-section" class="section">
+                <div id="status-message" class="status-message"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 GitHub Issue AI Summarizer</p>
+        </footer>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
